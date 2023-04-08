@@ -1,37 +1,26 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
+const { hashPasword } = require("../helpers/hash")
+
+
+router.use((req, res, next)=>{
+  if (req.session.user && req.session.user.role === "admin") {
+    next();
+  }else{
+    res.sendStatus(401)
+  }
+})
+
 
 router.get("/", async (req, res) => {
-  const u = await User.findOne({
-    user: req.body.user,
-    password: req.body.password,
-  });
-  console.log(req.body);
-  if (u) {
-    res.send("Encontrado");
-  } else {
-    res.send("Invalido");
-  }
+  const users = await User.find()
+  res.json(users)
 });
+
 
 router.post("/", async (req, res) => {
-  console.log(req.body);
-  const check = await User.findOne({
-    username: req.body.user,
-    password: req.body.password,
-  });
-  if (check) {
-    res.json("Encontrado");
-  } else {
-    res.json("Error");
-  }
-});
-
-router.post("/signup", async (req, res) => {
   const { username, password, role } = req.body;
-
-  console.log(req.body);
 
   const check = await User.findOne({username})
 
@@ -40,7 +29,7 @@ router.post("/signup", async (req, res) => {
   }else{
     let u = new User({
       username,
-      password,
+      password: hashPasword(password), 
       role,
     });
   
