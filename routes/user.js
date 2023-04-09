@@ -44,4 +44,50 @@ router.post("/", async (req, res) => {
 
 });
 
+
+router.get('/:id', (req, res) => {
+  User.findById(req.params.id)
+    .then(user => {
+      if (user) {
+        res.json(user);
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    })
+    .catch(err => {
+      res.status(400).json({ error: err.message });
+    });
+});
+
+
+router.put('/:id', (req, res) => {
+  User.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then(user => {
+      if (user) {
+        res.json(user);
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    })
+    .catch(err => {
+      res.status(400).json({ error: err.message });
+    });
+});
+
+
+router.delete('/:id', (req, res) => {
+  User.findByIdAndDelete(req.params.id)
+    .then(user => {
+      if (user) {
+        res.json({ message: 'User deleted' });
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    })
+    .catch(err => {
+      res.status(400).json({ error: err.message });
+    });
+});
+
+
 module.exports = router;

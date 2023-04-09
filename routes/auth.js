@@ -22,25 +22,31 @@ router.post("/login", async (req, res) => {
 
   if (isValid) {
     req.session.user = user
-    return res.sendStatus(200)
+    return res.send(req.session.user)
   }else{
     return res.sendStatus(401)
   }
 
- /* if (u) {
-    if (req.session.user) {
-      res.send(req.session.user);
-    } else {
-      req.session.user = {
-        username: u.username,
-        role: u.role
-      };
-      res.send(req.session)
-    }
-  } else {
-    res.sendStatus(401);
-  }*/
+});
 
+
+router.get("/login",(req,res)=>{
+  if (req.session.user) {
+    res.send(req.session.user)
+  }else{
+    res.sendStatus(401)
+  }
+});
+
+
+router.get('/logout', function(req, res){
+  req.session.destroy(function(err) {
+    if(err) {
+      res.status(500).send('Error logging out: ' + err.message);
+    } else {
+      res.sendStatus(200)
+    }
+  });
 });
 
 module.exports = router

@@ -14,12 +14,16 @@ app.use(express.urlencoded())
 app.use(session({
   secret: "secret",
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: { maxAge: 43200000  } //Session dura 12 horas
 }))
 
-app.use('/api/user', require('./routes/user'))
 
+
+app.use('/api/user', require('./routes/user'))
 app.use('/api/auth', require('./routes/auth'))
+
+
 
 app.listen(5000, () => {
   console.log('Server started on port 5000');
