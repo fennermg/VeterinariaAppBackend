@@ -25,6 +25,8 @@ app.use(session({
 
 app.use('/api/user', require('./routes/user'))
 app.use('/api/auth', require('./routes/auth'))
+app.use('/api/responsable', require('./routes/responsable'))
+app.use('/api/paciente', require('./routes/paciente'))
 
 
 

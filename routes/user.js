@@ -60,7 +60,7 @@ router.get('/:id', (req, res) => {
 });
 
 
-router.put('/:id', (req, res) => {
+router.patch('/:id', (req, res) => {
   User.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(user => {
       if (user) {
