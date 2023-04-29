@@ -22,24 +22,25 @@ router.post("/", async (req, res) => {
   if (paciente.responsable) {
     try {
       await paciente.save().then((saved) => {
-        Responsable.findById(saved.responsable.toString()).then(
+        Responsable.findById(saved.responsable._id).then(
           (responsable) => {
-            console.log(responsable);
-
             responsable.pacientes.push(saved);
             responsable.save();
           }
         );
+        res.status(200).send(saved);
       });
-      res.status(200).send("OK");
+
     } catch (error) {
       console.error(error);
       res.status(500).send(error.message);
     }
   } else {
     try {
-      await paciente.save();
-      res.status(200).send("OK");
+      await paciente.save().then((saved)=>{
+        res.status(200).send(saved);
+      });
+
     } catch (error) {
       console.error(error);
       res.status(500).send(error.message);
