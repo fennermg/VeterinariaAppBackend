@@ -48,4 +48,68 @@ router.post("/", async (req, res) => {
   }
 });
 
+
+
+router.get('/:id', (req, res) => {
+  Paciente.findById(req.params.id)
+    .then(paciente => {
+      if (paciente) {
+        res.json(paciente);
+      } else {
+        res.status(404).json({ error: 'Paciente not found' });
+      }
+    })
+    .catch(err => {
+      res.status(400).json({ error: err.message });
+    });
+});
+
+
+router.patch('/:id', async (req, res) => {
+  let pacienteBeforeUpdate = await Paciente.findById(req.params.id);
+
+  Paciente.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then(paciente => {
+      if (paciente) {
+          if (!paciente.responsable) {
+
+
+            Responsable.updateOne(
+              { _id: pacienteBeforeUpdate.responsable }, 
+              { $pull: { pacientes: paciente._id } }
+            );
+
+            
+            /*Responsable.findById(pacienteBeforeUpdate.responsable).then((found)=>{
+              console.log(found)
+              
+            })*/
+          }
+        res.json(paciente);
+      } else {
+        res.status(404).json({ error: 'Paciente not found' });
+      }
+    })
+    .catch(err => {
+      res.status(400).json({ error: err.message });
+    });
+});
+
+
+router.delete('/:id', (req, res) => {
+  Paciente.findByIdAndDelete(req.params.id)
+    .then(paciente => {
+      if (paciente) {
+        res.json({ message: 'Paciente deleted' });
+      } else {
+        res.status(404).json({ error: 'Paciente not found' });
+      }
+    })
+    .catch(err => {
+      res.status(400).json({ error: err.message });
+    });
+});
+
+
+
 module.exports = router;

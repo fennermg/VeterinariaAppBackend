@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
     }
   } else {
     try {
-      await responsable.save().then((saved)=>{
+      await responsable.save().then((saved) => {
         res.status(200).send(saved);
       });
     } catch (error) {
@@ -44,6 +44,109 @@ router.post("/", async (req, res) => {
       res.status(500).send(error.message);
     }
   }
+});
+
+router.get("/:id", (req, res) => {
+  Responsable.findById(req.params.id).populate("pacientes")
+    .then((responsable) => {
+      if (responsable) {
+        res.json(responsable);
+      } else {
+        res.status(404).json({ error: "Responsable not found" });
+      }
+    })
+    .catch((err) => {
+      res.status(400).json({ error: err.message });
+    });
+});
+
+//Este metodo elimina mascotas y agrega pero tiene un error cuando se elimina la misma cantidad de mascotas que se grega.
+/*
+router.patch("/:id", async (req, res) => {
+  let responsableBeforeUpdate = await Responsable.findById(req.params.id);
+
+  Responsable.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then((responsable) => {
+      if (responsable) {
+        const diffArr = responsableBeforeUpdate.pacientes.filter((item) => !responsable.pacientes.includes(item)).concat(responsable.pacientes.filter((item) => !responsableBeforeUpdate.pacientes.includes(item)));
+        if (responsableBeforeUpdate.pacientes.length > responsable.pacientes.length) {
+          console.log("Eliminando")
+          diffArr.forEach(async (paciente) => {
+            let found = await Paciente.findById(paciente._id);
+            found.responsable = undefined;
+            found.save();
+          });
+  
+          res.json(responsable);
+        }else{
+          console.log("agregando")
+          diffArr.forEach(async (paciente) => {
+            let found = await Paciente.findById(paciente._id);
+            found.responsable = responsable;
+            found.save();
+          });
+          res.json(responsable);
+        }
+
+      } else {
+        res.status(404).json({ error: "Responsable not found" });
+      }
+    })
+    .catch((err) => {
+      res.status(400).json({ error: err.message });
+    });
+});
+
+*/
+
+
+router.patch("/:id", async (req, res) => {
+  let responsableBeforeUpdate = await Responsable.findById(req.params.id);
+
+  responsableBeforeUpdate.pacientes.forEach(async (paciente) => {
+    let found = await Paciente.findById(paciente._id);
+    found.responsable = undefined;
+    found.save();
+  });
+
+  Responsable.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then((responsable) => {
+      if (responsable) {
+        responsable.pacientes.forEach(async (paciente) => {
+          let found = await Paciente.findById(paciente._id);
+          found.responsable = responsable;
+          found.save();
+        });
+        res.json(responsable);
+      } else {
+        res.status(404).json({ error: "Responsable not found" });
+      }
+    })
+    .catch((err) => {
+      res.status(400).json({ error: err.message });
+    });
+});
+
+router.delete("/:id", async (req, res) => {
+  let responsableBeforeUpdate = await Responsable.findById(req.params.id);
+
+  responsableBeforeUpdate.pacientes.forEach(async (paciente) => {
+    let found = await Paciente.findById(paciente._id);
+    found.responsable = undefined;
+    found.save();
+  });
+  
+  Responsable.findByIdAndDelete(req.params.id)
+    .then((responsable) => {
+      if (responsable) {
+        res.json({ message: "Responsable deleted" });
+      } else {
+        res.status(404).json({ error: "Responsable not found" });
+      }
+    })
+    .catch((err) => {
+      res.status(400).json({ error: err.message });
+    });
 });
 
 module.exports = router;
