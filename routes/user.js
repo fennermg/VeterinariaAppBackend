@@ -2,15 +2,16 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const { hashPasword } = require("../helpers/hash")
+const RVet = require("../models/RVet");
 
 
-router.use((req, res, next)=>{
+/*router.use((req, res, next)=>{
   if (req.session.user && req.session.user.role === "admin") {
     next();
   }else{
     res.sendStatus(401)
   }
-})
+})*/
 
 
 router.get("/", async (req, res) => {
@@ -57,6 +58,20 @@ router.get('/:id', (req, res) => {
     .catch(err => {
       res.status(400).json({ error: err.message });
     });
+});
+
+router.get("/:id/rvet", (req, res) => {
+
+  RVet.find({user : req.params.id}).then((rvet)=>{
+    if (rvet) {
+      res.json(rvet);
+    }else{
+      res.status(404).json({ error: "Revision not found" });
+    }
+  })
+  .catch((err) => {
+    res.status(400).json({ error: err.message });
+  });
 });
 
 

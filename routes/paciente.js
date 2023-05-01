@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Paciente = require("../models/Paciente");
 const Responsable = require("../models/Responsable");
+const RVet = require("../models/RVet");
+const Cita = require("../models/Cita");
 
 /*router.use((req, res, next) => {
   if (req.session.user) {
@@ -56,6 +58,37 @@ router.get("/:id", (req, res) => {
     .catch((err) => {
       res.status(400).json({ error: err.message });
     });
+});
+
+
+
+router.get("/:id/rvet", (req, res) => {
+
+  RVet.find({paciente : req.params.id}).then((rvet)=>{
+    if (rvet) {
+      res.json(rvet);
+    }else{
+      res.status(404).json({ error: "Revision not found" });
+    }
+  })
+  .catch((err) => {
+    res.status(400).json({ error: err.message });
+  });
+});
+
+
+router.get("/:id/cita", (req, res) => {
+
+  Cita.find({paciente : req.params.id}).then((cita)=>{
+    if (cita) {
+      res.json(cita);
+    }else{
+      res.status(404).json({ error: "Cita not found" });
+    }
+  })
+  .catch((err) => {
+    res.status(400).json({ error: err.message });
+  });
 });
 
 /*

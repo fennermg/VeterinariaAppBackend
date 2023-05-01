@@ -27,7 +27,8 @@ app.use('/api/user', require('./routes/user'))
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/responsable', require('./routes/responsable'))
 app.use('/api/paciente', require('./routes/paciente'))
-
+app.use('/api/rvet', require('./routes/rvet'))
+app.use('/api/cita', require('./routes/cita'))
 
 
 app.listen(5000, () => {
