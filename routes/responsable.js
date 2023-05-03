@@ -3,13 +3,13 @@ const router = express.Router();
 const Responsable = require("../models/Responsable");
 const Paciente = require("../models/Paciente");
 
-/*router.use((req, res, next) => {
+router.use((req, res, next) => {
   if (req.session.user) {
     next();
   } else {
     res.sendStatus(401);
   }
-});*/
+});
 
 router.get("/", async (req, res) => {
   const responsables = await Responsable.find().populate("pacientes");

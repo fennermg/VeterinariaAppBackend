@@ -5,7 +5,7 @@ const pacienteSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-/*  raza: {
+  raza: {
     type: String,
     required: true,
   },
@@ -54,7 +54,7 @@ const pacienteSchema = new mongoose.Schema({
     required: true,
     default: Date.now,
   },
-*/
+
   responsable: { type: mongoose.Schema.Types.ObjectId, ref: 'Responsable' }
 });
 

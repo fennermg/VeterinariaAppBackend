@@ -3,6 +3,14 @@ const router = express.Router();
 const RVet = require("../models/RVet");
 const Cita = require("../models/Cita");
 
+router.use((req, res, next) => {
+  if (req.session.user) {
+    next();
+  } else {
+    res.sendStatus(401);
+  }
+});
+
 router.get("/", async (req, res) => {
   const rvets = await RVet.find().populate("paciente user");
   res.json(rvets);

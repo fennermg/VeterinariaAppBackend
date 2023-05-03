@@ -25,9 +25,8 @@ const rVetSchema = new mongoose.Schema({
     required: true,
   },
 
-  /*
   numero: {
-    type: Int16Array,
+    type: Number,
     required: true,
   },
 
@@ -85,7 +84,7 @@ const rVetSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
+/*
     profAntipara: [profAntiparaSchema],
   */
 

@@ -6,7 +6,6 @@ const citaSchema = new mongoose.Schema({
     required: true,
   },
 
-/*
   fecha: {
     type: Date,
     required: true,
@@ -26,7 +25,6 @@ const citaSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  */
 
   paciente: { type: mongoose.Schema.Types.ObjectId, ref: "Paciente" },
 

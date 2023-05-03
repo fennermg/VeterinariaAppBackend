@@ -2,6 +2,15 @@ const express = require("express");
 const router = express.Router();
 const Cita = require("../models/Cita")
 
+
+router.use((req, res, next) => {
+  if (req.session.user) {
+    next();
+  } else {
+    res.sendStatus(401);
+  }
+});
+
 router.get("/", async (req, res) => {
   const citas = await Cita.find().populate("paciente rvet");
   res.json(citas);

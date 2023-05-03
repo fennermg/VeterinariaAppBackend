@@ -5,7 +5,7 @@ const responsableSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-/*  apellido: {
+  apellido: {
     type: String,
     required: true,
   },
@@ -26,7 +26,7 @@ const responsableSchema = new mongoose.Schema({
     required: true,
     default: Date.now,
   },
-*/
+
   pacientes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Paciente' }]
 
 });
