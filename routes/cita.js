@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
   try {
     const cita = new Cita(req.body);
     await cita.save();
-    res.status(201).json(cita);
+    res.status(200).json(cita);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

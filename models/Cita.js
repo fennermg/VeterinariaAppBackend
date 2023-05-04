@@ -12,7 +12,7 @@ const citaSchema = new mongoose.Schema({
   },
 
   hora: {
-    type: Date,
+    type: String,
     required: true,
   },
 
